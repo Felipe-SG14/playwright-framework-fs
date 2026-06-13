@@ -1,6 +1,6 @@
 {
-  "name": "playwright-framework",
-  "version": "1.0.0",
+  "name": "@playwright-framework/fs",
+  "version": "1.0.1",
   "description": "Core reusable framework for Playwright automation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
