@@ -30,7 +30,9 @@ export default defineConfig({
     }],
     ['junit', { 
       outputFile: 'test-results/junit-report.xml',
-      stripANSIControlSequences: true // Limpia caracteres raros de color de la consola en el XML
+      stripANSIControlSequences: true,
+      embedAnnotationsAsProperties: true,
+      includeProjectInTestName: true
     }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
