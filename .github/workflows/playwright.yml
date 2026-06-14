@@ -32,7 +32,7 @@ jobs:
       run: npx playwright test
 
     - name: Publish JUnit Test Results
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v3
       if: ${{ !cancelled() }}
       with:
         name: Playwright Test Execution Report
