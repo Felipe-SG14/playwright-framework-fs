@@ -23,6 +23,9 @@
         "esModuleInterop": true,
         "outDir": "dist",
         "rootDir": "src",
+        "paths": {
+            "@playwright-framework/fs": ["./src/index.ts"]
+        }
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules", "dist", "src/**/*.spec.ts", "src/**/*.test.ts"]
