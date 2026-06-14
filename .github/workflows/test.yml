@@ -2,9 +2,22 @@ name: Take home challenge - Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      workers:
+        description: 'Number of parallel workers'
+        required: false
+        default: '1'
+        type: string
+      retries:
+        description: 'Number of test retries on failure'
+        required: false
+        default: '0'
+        type: string
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  WORKERS: ${{ github.event.inputs.workers }}
+  RETRIES: ${{ github.event.inputs.retries }}
 
 permissions:
   contents: read
