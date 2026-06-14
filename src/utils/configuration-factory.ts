@@ -28,7 +28,14 @@ export class ConfigurationFactory {
     const rootDir = path.resolve(process.cwd());
     const reportsDir = path.join(rootDir, 'reports');
 
-    // 1. CONSOLIDATED CHROMIUM CAMOUFLAGE ARGUMENTS
+    // 🌟 BRIDGE CUSTOM HOOKS TO PROCESS ENV TO PASS AS STRINGS Safely
+    if (customOverrides.globalSetup && typeof customOverrides.globalSetup === 'string') {
+      process.env.CORE_CONSUMER_SETUP_PATH = path.resolve(customOverrides.globalSetup);
+    }
+    if (customOverrides.globalTeardown && typeof customOverrides.globalTeardown === 'string') {
+      process.env.CORE_CONSUMER_TEARDOWN_PATH = path.resolve(customOverrides.globalTeardown);
+    }
+
     const chromiumArgs = [
       '--start-maximized',
       '--disable-infobars',
@@ -43,6 +50,8 @@ export class ConfigurationFactory {
 
     // 2. CORE ARCHITECTURE SPECIFICATION
     const baseConfig: PlaywrightTestConfig = {
+      globalSetup: path.resolve(process.cwd(), 'src', 'utils', 'orchestrated-setup.ts'),
+      globalTeardown: path.resolve(process.cwd(), 'src', 'utils', 'orchestrated-teardown.ts'),
       testDir: path.resolve(rootDir, 'test', 'specs'),
       testMatch: '**/*.spec.ts',
       fullyParallel: true,
@@ -51,6 +60,7 @@ export class ConfigurationFactory {
 
       // ABSOLUTE PATH DISTRIBUTION FOR TEST REPORTING PIPELINES
       reporter: [
+        ['list'],
         ['html', { outputFolder: path.join(reportsDir, 'playwright-report'), open: 'never' }],
         ['junit', { outputFile: path.join(reportsDir, 'junit', 'junit-report.xml'), stripANSIControlSequences: true, embedAnnotationsAsProperties: true, includeProjectInTestName: true }],
         ['allure-playwright', { detail: true, resultsDir: path.join(reportsDir, 'allure-results'), suiteTitle: true, forceClean: true }]
@@ -58,7 +68,7 @@ export class ConfigurationFactory {
 
       // CENTRALIZED GLOBAL EXECUTION ENVIRONMENT
       use: {
-        headless: true, // Playwright naturally forces false if '--headed' is passed via CLI
+        headless: true,
         viewport: { width: 1920, height: 1080 },
         screenshot: 'only-on-failure',
         trace: 'retain-on-failure',
@@ -74,8 +84,6 @@ export class ConfigurationFactory {
           name: 'chromium',
           use: { 
             ...devices['Desktop Chrome'],
-            // 🌟 THE SOLUTION: Forces Playwright to use the real Chromium browser instead of the leaky headless shell.
-            // When running invisibly, this natively triggers the authentic, reliable "New Headless Mode".
             channel: 'chromium' 
           },
         },
@@ -90,7 +98,6 @@ export class ConfigurationFactory {
           name: 'firefox',
           use: { 
             ...devices['Desktop Firefox'],
-            // Firefox uses its own launch arguments to prevent binary interpretation crashes against chromium flags
             launchOptions: { args: ['--no-remote'] }
           },
         },
@@ -98,23 +105,26 @@ export class ConfigurationFactory {
           name: 'webkit',
           use: { 
             ...devices['Desktop Safari'],
-            // WebKit overrides launchOptions to run cleanly without experimental desktop flags
             launchOptions: { args: [] } 
           },
         },
       ],
     };
 
-    // 3. SAFE LIQUID DEEP MERGE DELIVERING IMMUTABLE CONFIGURATION OBJECTS
+    // Clean out the consumer properties if they were provided to prevent them from wiping out our drivers during deep merge
+    const sanitizedOverrides = { ...customOverrides };
+    delete sanitizedOverrides.globalSetup;
+    delete sanitizedOverrides.globalTeardown;
+
     return {
       ...baseConfig,
-      ...customOverrides,
+      ...sanitizedOverrides,
       use: {
         ...baseConfig.use,
-        ...customOverrides.use,
+        ...sanitizedOverrides.use,
         launchOptions: {
           ...baseConfig.use?.launchOptions,
-          ...customOverrides.use?.launchOptions,
+          ...sanitizedOverrides.use?.launchOptions,
         }
       }
     };
