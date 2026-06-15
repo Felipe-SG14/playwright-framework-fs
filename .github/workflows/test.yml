@@ -38,9 +38,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Handle Playwright browser cache
+    - name: Restore Playwright browser cache
       id: playwright-cache
-      uses: actions/cache@v5
+      uses: actions/cache/restore@v5
       with:
         path: ~/.cache/ms-playwright
         key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -52,7 +52,16 @@ jobs:
       run: npx playwright install --with-deps --no-shell
 
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --headed=false
+      env:
+        CI: true
+
+    - name: Force Save Playwright browser cache
+      if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Publish JUnit Test Results
       uses: dorny/test-reporter@v3
