@@ -54,6 +54,7 @@ export class ConfigurationFactory {
       globalTeardown: path.resolve(process.cwd(), 'src', 'utils', 'orchestrated-teardown.ts'),
       testDir: path.resolve(rootDir, 'test', 'specs'),
       testMatch: '**/*.spec.ts',
+      outputDir: path.resolve(reportsDir, 'test-results'),
       fullyParallel: true,
       retries: process.env.RETRIES ? parseInt(process.env.RETRIES, 10) : 0,
       workers: process.env.WORKERS ? parseInt(process.env.WORKERS, 10) : 1,
@@ -75,6 +76,7 @@ export class ConfigurationFactory {
         acceptDownloads: false,
         locale: 'es-MX',
         timezoneId: 'America/Mexico_City',
+        permissions: [],
         launchOptions: { args: chromiumArgs }
       },
 
