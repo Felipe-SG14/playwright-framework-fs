@@ -6,7 +6,7 @@ import { UIElement, ElementTimeout, PlaywrightWaitState } from '@playwright-fram
 export class LiverpoolSearchResultsPage extends CommonPage {
 
     protected get productListContainer() {
-        return new UIElement(LiverpoolSearchResultsPageLocators.productListContainer, PlaywrightWaitState.VISIBLE, ElementTimeout.LONG);
+        return new UIElement(LiverpoolSearchResultsPageLocators.productListContainer, PlaywrightWaitState.VISIBLE, ElementTimeout.X_LONG);
     }
 
     protected get colorButtonDynamic() {
@@ -14,7 +14,7 @@ export class LiverpoolSearchResultsPage extends CommonPage {
     }
 
     protected get colorFilterDiv() {
-        return new UIElement(LiverpoolSearchResultsPageLocators.colorFilterDiv, PlaywrightWaitState.VISIBLE);
+        return new UIElement(LiverpoolSearchResultsPageLocators.colorFilterDiv, PlaywrightWaitState.VISIBLE, ElementTimeout.LONG);
     }
 
     protected get sortByButton() {

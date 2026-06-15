@@ -9,16 +9,16 @@ test.describe('Take home challenge - Data Driven E2E Suite', () => {
       searchQuery: 'playstation 5', 
       colorFilter: COLOR_FILTERS.WHITE_COLOR_FILTER 
     },
-    // { 
-    //   consoleName: 'Xbox Series X', 
-    //   searchQuery: 'xbox series x', 
-    //   colorFilter: COLOR_FILTERS.BLACK_COLOR_FILTER 
-    // },
-    // { 
-    //   consoleName: 'Nintendo Switch', 
-    //   searchQuery: 'nintendo switch', 
-    //   colorFilter: COLOR_FILTERS.RED_COLOR_FILTER 
-    // }
+    { 
+      consoleName: 'Xbox Series X', 
+      searchQuery: 'xbox series x', 
+      colorFilter: COLOR_FILTERS.BLACK_COLOR_FILTER 
+    },
+    { 
+      consoleName: 'Nintendo Switch', 
+      searchQuery: 'nintendo switch', 
+      colorFilter: COLOR_FILTERS.RED_COLOR_FILTER 
+    }
   ];
 
   test.beforeEach(async ({ pom }) => {
