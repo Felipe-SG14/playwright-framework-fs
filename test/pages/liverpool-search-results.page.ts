@@ -43,6 +43,7 @@ export class LiverpoolSearchResultsPage extends CommonPage {
         await this.actions.scrollToElement(colorButton);
         await this.actions.click(colorButton);
         await this.actions.scrollToElement(this.sortByButton);
+        await this.actions.waitForAttachment(this.colorFilterDiv);
         await this.actions.waitForVisibility(this.colorFilterDiv);
         await this.actions.takeScreenshot(`[LiverpoolSearchResultsPage] Color Filter: ${color} was selected`);
     }
