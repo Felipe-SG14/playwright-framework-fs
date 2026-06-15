@@ -364,11 +364,21 @@ This repository includes a GitHub Actions workflow at `.github/workflows/test.ym
 3. **Install dependencies**
    * Runs `npm ci` to install exact package versions from `package-lock.json`.
 
-4. **Install Playwright browsers**
-   * Runs `npx playwright install --with-deps --no-shell`.
-   * Ensures the browser binaries and system dependencies are available in the CI environment.
+4. **Restore Playwright browser cache**
+   * Uses `actions/cache@v5` to restore `~/.cache/ms-playwright` if a previous run already saved it.
+   * This avoids re-downloading browsers when the cache is available.
+   * The cache is retained for 7 days, so it can be reused across runs in that window.
 
-5. **Run Playwright tests**
+5. **Install Playwright browsers if needed**
+   * Runs `npx playwright install --with-deps --no-shell` only when the cache was not restored.
+   * If the cache exists, this step is skipped and the workflow is much faster.
+
+6. **Save Playwright browser cache when missing**
+   * Uses `actions/cache@v5` to upload `~/.cache/ms-playwright` after install, only when the cache was not already present.
+   * The cache is retained for 7 days, so future runs can restore it without re-downloading browsers.
+   * This makes future CI runs faster by reusing the browser binaries.
+
+7. **Run Playwright tests**
    * Runs `npx playwright test`.
    * This executes the same test command used locally, so the CI behavior mirrors developer execution.
 

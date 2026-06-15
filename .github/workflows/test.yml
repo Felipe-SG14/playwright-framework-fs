@@ -46,6 +46,7 @@ jobs:
         key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           playwright-browsers-${{ runner.os }}-
+        retention-days: 7
 
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -59,6 +60,7 @@ jobs:
         key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           playwright-browsers-${{ runner.os }}-
+        retention-days: 7
 
     - name: Run Playwright tests
       run: npx playwright test
